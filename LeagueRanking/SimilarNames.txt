@@ -1,0 +1,6 @@
+Manchester City 1, Chelsea 2
+Manchester United 3, Liverpool 4
+Arsenal 1, Chelsea 1
+Aston Villa 1, Liverpool 0
+Manchester City 1, Arsenal 0
+Aston Villa 0, Manchester United 3

@@ -1,6 +1,6 @@
+package com.app;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,11 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Scanner;
 
 public class LeagueRanking {
 
-    private static Map<String, Integer> pointsByTeam(String gamesResults) {
+    public static Map<String, Integer> pointsByTeam(String gamesResults) {
         Map<String, Integer> allTeams = new HashMap<String, Integer>();
         String[] games = gamesResults.split("\\R");
 
@@ -54,7 +53,7 @@ public class LeagueRanking {
         return allTeams;
     }
 
-    private static List<Entry<String, Integer>> sortTeamsByPoints(Map<String, Integer> teamsPoints) {
+    public static List<Entry<String, Integer>> sortTeamsByPoints(Map<String, Integer> teamsPoints) {
         List<Entry<String, Integer>> sortedList = new ArrayList<>(teamsPoints.entrySet());
         // Override sort method to sort values (points in league) by descending order,
         // and keys in ascending order (alphabetically)
@@ -73,12 +72,14 @@ public class LeagueRanking {
         return sortedList;
     }
 
-    private static void setRankInLeague(List<Entry<String, Integer>> list) {
+    public static String setRankInLeague(List<Entry<String, Integer>> list) {
         int ranking = 1;
         int temp1 = 1;
         int temp2 = 0;
         int lastPoints = list.get(0).getValue();
         String singularPlural;
+
+        String finalRanking = "";
 
         for (Entry<String, Integer> en : list) {
             if (!(lastPoints == en.getValue())) {
@@ -89,7 +90,7 @@ public class LeagueRanking {
                 ranking = temp1;
             }
             singularPlural = en.getValue().equals(new Integer(1)) ? "pt" : "pts";
-            System.out.println(ranking + ". " + en.getKey() + ", " + en.getValue() + " " + singularPlural);
+            finalRanking += ranking + ". " + en.getKey() + ", " + en.getValue() + " " + singularPlural + System.lineSeparator();
 
             if (!(lastPoints == en.getValue())) {
                 ranking = temp1;
@@ -101,10 +102,10 @@ public class LeagueRanking {
 
             lastPoints = en.getValue();
         }
-        return;
+        return finalRanking;
     }
 
-    private static String readFile(String filename) {
+    public static String readFile(String filename) {
         BufferedReader reader;
         String allLines = "";
 
@@ -127,14 +128,16 @@ public class LeagueRanking {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Write the filename: ");
-        Scanner scan = new Scanner(System.in);
-        String filename = scan.nextLine();
-        scan.close();
+        if (args.length==0) {
+            System.out.println("Please add file name as argument.");
+            System.exit(0);
+        }
+
+        String filename = args[0];
 
         String input = readFile(filename);
 
-        Map<String, Integer> teamsPoints = pointsByTeam(input);
-        setRankInLeague(sortTeamsByPoints(teamsPoints));
+        String result = setRankInLeague(sortTeamsByPoints(pointsByTeam(input)));
+        System.out.println(result);
     }
 }
